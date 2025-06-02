@@ -1,103 +1,179 @@
+"use client";
+
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import ProjectCard from "@/components/common/ProjectCard";
+import { Section } from "@/components/ui/Section";
+import { Button } from "@/components/ui/button";
+import { PROJECTS, SITE_CONFIG } from "@/lib/constants";
+import { fadeInUp, staggerContainer, pageTransition } from "@/lib/animations";
 import Image from "next/image";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const featuredProjects = PROJECTS.filter((project) => project.featured);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const arrowVariantsOut = {
+    rest: { x: 0, y: 0, opacity: 1 },
+    hover: { x: 20, y: -20, opacity: 0 },
+  };
+
+  const arrowVariantsIn = {
+    rest: { x: -20, y: 20, opacity: 0 },
+    hover: { x: 0, y: 0, opacity: 1 },
+  };
+
+  return (
+    <motion.div
+      className="min-h-screen"
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={pageTransition}
+    >
+      <Header />
+
+      <main className="pt-20">
+        {/* Hero Section */}
+        <Section className="py-32" containerSize="md">
+          <motion.div
+            className="text-center"
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <motion.div className="mb-8" variants={fadeInUp}>
+              <div className=" mx-auto mb-8 rounded-2xl overflow-hidden bg-gray-200 shadow-lg">
+                <Image
+                  src="https://placehold.co/600x400.png"
+                  width={600}
+                  height={400}
+                  alt="Profile Photo"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </motion.div>
+
+            <motion.div className="text-center space-y-4" variants={fadeInUp}>
+              <p className="text-gray-600 text-lg">Current</p>
+              <h1 className="text-3xl md:text-4xl font-bold text-balance">
+                {SITE_CONFIG.title} at {SITE_CONFIG.company}
+              </h1>
+            </motion.div>
+          </motion.div>
+        </Section>
+
+        {/* Featured Works */}
+        <Section className="py-32">
+          <motion.div
+            className="text-center mb-16"
+            initial="hidden"
+            whileInView="visible"
+            variants={fadeInUp}
+            viewport={{ once: true }}
           >
-            Read our docs
-          </a>
-        </div>
+            <h2 className="text-5xl font-bold mb-8">Featured Works</h2>
+            <Link href="/work">
+              <Button
+                className="rounded-full hover:scale-105 transition-transform duration-300"
+                variant="custom"
+                size="lg"
+              >
+                Discover All
+              </Button>
+            </Link>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {featuredProjects.map((project, index) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                index={index}
+                featured
+              />
+            ))}
+          </div>
+        </Section>
+
+        {/* About Preview */}
+        <Section className="py-32 bg-white" containerSize="md">
+          <motion.div
+            className="text-center"
+            initial="hidden"
+            whileInView="visible"
+            variants={fadeInUp}
+            viewport={{ once: true }}
+          >
+            <Link href="/about">
+              <Button
+                className="rounded-full hover:scale-105 transition-transform duration-300"
+                variant="custom"
+                size="lg"
+              >
+                About
+              </Button>
+            </Link>
+            <p className="text-gray-600 text-lg leading-relaxed max-w-2xl mt-10 mx-auto">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+              tincidunt ante tortor, eu tempus metus placerat eu. Cras nulla
+              tortor, ullamcorper in auctor at, vehicula vitae justo. Aliquam
+              quis ornare eros.
+            </p>
+          </motion.div>
+        </Section>
+
+        {/* Contact Preview */}
+        <Section className="py-32 bg-gray-50" containerSize="md">
+          <motion.div
+            className="text-center space-y-8"
+            initial="hidden"
+            whileInView="visible"
+            variants={fadeInUp}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-5xl font-bold">Contact</h2>
+            <div className="max-w-2xl mx-auto flex items-center justify-center space-x-4">
+              <p className="text-gray-600 text-lg leading-relaxed max-w-2xl mx-auto">
+                Have a project in mind or just want to chat? Feel free to reach
+                out. I{"'"}m always open to new opportunities and
+                collaborations.
+              </p>
+              <Link href="/contact" className="inline-block">
+                <motion.div
+                  className="group relative w-12 h-12 bg-[#4724F5] text-[#BAFF2F] rounded-full shadow-lg overflow-hidden flex items-center justify-center"
+                  initial="rest"
+                  whileHover="hover"
+                  animate="rest"
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {/* Arrow moving OUT ↗️ */}
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center z-10"
+                    variants={arrowVariantsOut}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                  >
+                    <ArrowUpRight size={36} />
+                  </motion.div>
+
+                  {/* Arrow moving IN ↗️ from ↙️ */}
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center z-0"
+                    variants={arrowVariantsIn}
+                    transition={{ duration: 0.8, ease: "easeInOut" }}
+                  >
+                    <ArrowUpRight size={36} />
+                  </motion.div>
+                </motion.div>
+              </Link>
+            </div>
+          </motion.div>
+        </Section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+      <Footer />
+    </motion.div>
   );
 }
